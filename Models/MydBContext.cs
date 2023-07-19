@@ -12,5 +12,8 @@ namespace AttendanceSystem.Models
         public DbSet<LogIn> LogIns { get; set; }
 
         public DbSet<Level> Levels { get; set; }
+        public DbSet<Group> Groups {get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<StudentRegistration> StudentRegistrations { get; set; }
     }
 }

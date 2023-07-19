@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AttendanceSystem.Models;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AttendanceSystem.Controllers
 {
@@ -39,6 +40,10 @@ namespace AttendanceSystem.Controllers
                 if (logInExit == null)
                 {
                     return RedirectToAction("Create", "SignUps");
+                }
+                else
+                {
+                    return RedirectToAction("Create", "StudentRegistrations");
                 }
             }
             catch (Exception ex)
