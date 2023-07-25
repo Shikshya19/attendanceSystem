@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AttendanceSystem.Models;
+using AttendanceSystem.ViewModel;
 
 namespace AttendanceSystem.Controllers
 {
@@ -45,9 +46,37 @@ namespace AttendanceSystem.Controllers
         }
 
         // GET: StudentRegistrations/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var model = new StudentRegistrationViewModel(); //creating instance
+            try 
+            {
+                var groupList = await _context.Groups.ToListAsync();
+                foreach (var da in groupList) 
+                {
+                    model.GroupData.Add(new SelectListItem //Instance inside
+                    {
+                        Value = da.Id.ToString(),
+                        Text = da.Name
+
+                    });
+                }
+                var levelList = await _context.Levels.ToListAsync();
+                foreach (var da in levelList)
+                {
+                    model.LevelData.Add(new SelectListItem //Instance inside
+                    {
+                        Value = da.Id.ToString(),
+                        Text = da.Name
+
+                    });
+                }
+                }
+            catch(Exception ex)
+            {
+
+            }
+            return View(model);
         }
 
         // POST: StudentRegistrations/Create

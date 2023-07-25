@@ -1,4 +1,4 @@
-﻿@model AttendanceSystem.Models.StudentRegistration
+﻿@model AttendanceSystem.ViewModel.StudentRegistrationViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -18,13 +18,13 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GroupId" class="control-label"></label>
-                <input asp-for="GroupId" class="form-control" />
+                <label class="control-label">Group</label>
+                @Html.DropDownListFor(x => x.GroupId, Model.GroupData,new { @class = "form-control"})
                 <span asp-validation-for="GroupId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LevelId" class="control-label"></label>
-                <input asp-for="LevelId" class="form-control" />
+                <label  class="control-label">Level</label>
+                @Html.DropDownListFor(x => x.LevelId, Model.LevelData,new { @class = "form-control"})
                 <span asp-validation-for="LevelId" class="text-danger"></span>
             </div>
             <div class="form-group">
