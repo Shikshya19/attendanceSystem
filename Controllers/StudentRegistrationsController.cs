@@ -22,9 +22,45 @@ namespace AttendanceSystem.Controllers
         // GET: StudentRegistrations
         public async Task<IActionResult> Index()
         {
-              return _context.StudentRegistrations != null ? 
-                          View(await _context.StudentRegistrations.ToListAsync()) :
-                          Problem("Entity set 'MyDbContext.StudentRegistrations'  is null.");
+            var studentList = new List<StudentRegistrationViewModel>();
+            try
+            {
+                if (_context.StudentRegistrations != null) 
+                {
+                    var getData = await _context.StudentRegistrations.ToListAsync();
+                    foreach (var item in getData) 
+                    {
+                        var groupName = await _context.Groups.
+                            FirstOrDefaultAsync(x => x.Id == item.GroupId); 
+                        var levelName = await _context.Levels.
+                            FirstOrDefaultAsync(x => x.Id == item.LevelId);
+                        studentList.Add(new StudentRegistrationViewModel
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            GroupName = groupName != null ? groupName.Name : "",
+                            LevelName = levelName != null ? levelName.Name : "",
+                            LevelId = item.LevelId,
+                            GroupId = item.GroupId
+
+
+                        });
+                    }
+
+                }
+
+            }
+            catch(Exception ex)
+            {
+
+
+            }
+            return View(studentList);
+
+
+              //return _context.StudentRegistrations != null ? 
+              //  View(await _context.StudentRegistrations.ToListAsync()) :
+              //Problem("Entity set 'MyDbContext.StudentRegistrations'  is null.");
         }
 
         // GET: StudentRegistrations/Details/5
@@ -98,18 +134,43 @@ namespace AttendanceSystem.Controllers
         // GET: StudentRegistrations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.StudentRegistrations == null)
-            {
-                return NotFound();
-            }
-
             var studentRegistration = await _context.StudentRegistrations.FindAsync(id);
-            if (studentRegistration == null)
+            var model = new StudentRegistrationViewModel(); //creating instance
+            try
             {
-                return NotFound();
+                var groupList = await _context.Groups.ToListAsync();
+                foreach (var da in groupList)
+                {
+                    model.GroupData.Add(new SelectListItem //Instance inside
+                    {
+                        Value = da.Id.ToString(),
+                        Text = da.Name
+
+                    });
+                }
+                var levelList = await _context.Levels.ToListAsync();
+                foreach (var da in levelList)
+                {
+                    model.LevelData.Add(new SelectListItem //Instance inside
+                    {
+                        Value = da.Id.ToString(),
+                        Text = da.Name
+
+                    });
+                }
+                model.Name = studentRegistration.Name;
+                model.Id = studentRegistration.Id;
+                model.GroupId = studentRegistration.GroupId;
+                model.LevelId = studentRegistration.LevelId;
+
             }
-            return View(studentRegistration);
+            catch (Exception ex)
+            {
+
+            }
+            return View(model);
         }
+        
 
         // POST: StudentRegistrations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
