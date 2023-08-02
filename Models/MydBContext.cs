@@ -15,5 +15,17 @@ namespace AttendanceSystem.Models
         public DbSet<Group> Groups {get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<StudentRegistration> StudentRegistrations { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<AttendanceDetail> AttendanceDetails { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Attendance>()
+                .HasMany(er => er.AttendanceDetails)
+                .WithOne(ed => ed.Attendance)
+                .HasForeignKey(ed => ed.AttendanceId);
+
+        }
     }
 }
